@@ -4,6 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ListView;
+import android.view.View;
+import android.widget.RadioButton;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 
@@ -11,27 +18,28 @@ public class MainActivity extends AppCompatActivity {
 
     UserListAdapter adapter;
     ListView listView;
+    ArrayList<User> users;
+    Gson gson;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.list);
-
-        ArrayList<User> users = new ArrayList<>();
-
-        // TODO: реализовать загрузку данных из JSON-файла
-        // который загрузить в папку assets
-
-        for (int i = 0; i < 10; i++) {
-            users.add(new User("Petya", "123", Sex.MAN));
-            users.add(new User("Vasya", "234", Sex.MAN));
-            users.add(new User("Valya", "456", Sex.WOMAN));
-            users.add(new User("UFO", "@@@", Sex.UNKNOWN));
-        }
-
-
+        gson = new Gson();
+        users = new ArrayList<>();
+        Type listUserType = new TypeToken<ArrayList<User>>() {
+        }.getType();
+        String jsonFileString = Utils.getJsonFromAssets(getApplicationContext(), "name.json");
+        users = gson.fromJson(jsonFileString, listUserType);
         adapter = new UserListAdapter(this, users);
+        listView.setAdapter(adapter);
+    }
 
+    public void resetUsersList(View view) {
+        RadioButton button = (RadioButton) view;
+        String option = button.getText().toString();
+        adapter.resetList(option);
         listView.setAdapter(adapter);
     }
 }
