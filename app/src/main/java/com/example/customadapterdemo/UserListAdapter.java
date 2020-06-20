@@ -107,8 +107,6 @@ public class UserListAdapter extends BaseAdapter {
 
         tvName.setText(u.name);
         tvPhone.setText(u.phoneNumber);
-        tvName.setTextSize(18);
-        tvPhone.setTextSize(18);
         switch (u.sex) {
             case MAN: ivUserpic.setImageResource(R.drawable.user_man); break;
             case WOMAN: ivUserpic.setImageResource(R.drawable.user_woman); break;
